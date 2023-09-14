@@ -46,6 +46,8 @@ class Post
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\OneToOne(inversedBy: 'post', cascade: ['persist', 'remove'])]
+    private ?Thumbnail $thumbnail = null;
 
     public function __construct()
     {
@@ -53,6 +55,7 @@ class Post
         $this->created_at = new \DateTimeImmutable();
     }
 
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->slug = ( new Slugify())->slugify($this->title);
@@ -114,6 +117,8 @@ class Post
 
         return $this;
     }
+   
+
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -142,4 +147,18 @@ class Post
     {
         return $this->title;
     }
+
+    public function getThumbnail(): ?Thumbnail
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?Thumbnail $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+   
 }
