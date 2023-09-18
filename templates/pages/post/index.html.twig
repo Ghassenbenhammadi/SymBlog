@@ -5,11 +5,16 @@
 {% block body %}
 <div class="container mx-auto mt-4">
   <h1 class="text-5xl text-center mt-24 mb-8">SymBlog</h1>
-<div class="flex flex-row flex-wrap justify-evenly mt-8">
-{% for post in posts %}
-{% include "components/_card.html.twig" %}
+  <div class="flex flex-row flex-wrap justify-evenly mt-8">
+    {% for post in posts %}
+    {% include "components/_card.html.twig" %}
+
+    {% endfor %}
+  </div>
+  <div class="navigation flex justify-center mb-8">
+    {{ knp_pagination_render(posts) }}
+  </div>
+</div>
   
-{% endfor %}
-</div>
-</div>
+
 {% endblock %}
