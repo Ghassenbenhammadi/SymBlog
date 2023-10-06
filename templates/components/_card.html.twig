@@ -6,6 +6,8 @@
             class="rounded-t-lg">
     </a>
     {% endif %}
+
+    {% include "components/_like.html.twig" %}
     <div class="p-5">
         <a href="{{ path('post.show', { slug: post.slug}) }}">
             <h5 class="mb-2 text-2xl font-blod tracking-tight text-gray-900 dark:text-white">

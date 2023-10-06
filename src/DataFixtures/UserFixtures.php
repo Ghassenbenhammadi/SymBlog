@@ -25,12 +25,11 @@ class UserFixtures extends Fixture
                 ->setFirstName($faker->firstName())
                 ->setPassword(
                     $this->hasher->hashPassword($user, 'password')
-                );
-                 
+                );     
             $manager->persist($user);
             
         }
-
+        
         $manager->flush();
     }
 }
