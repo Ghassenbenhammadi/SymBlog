@@ -11,3 +11,10 @@ import 'tw-elements';
 
 
 console.log('Welcome to symblog!!!!');
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    const likeElements = [].slice.call(document.querySelectorAll('a[data-action="like"]'));
+    if(likeElements){
+        new Like(likeElements);
+    }
+})

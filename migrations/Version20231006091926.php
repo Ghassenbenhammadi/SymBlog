@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230929102611 extends AbstractMigration
+final class Version20231006091926 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -34,6 +34,10 @@ final class Version20230929102611 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5A8A6C8DFDFF2E92 ON post (thumbnail_id)');
         $this->addSql('COMMENT ON COLUMN post.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN post.updated_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE user_post_like (post_id INT NOT NULL, user_id UUID NOT NULL, PRIMARY KEY(post_id, user_id))');
+        $this->addSql('CREATE INDEX IDX_65D6AA5C4B89032C ON user_post_like (post_id)');
+        $this->addSql('CREATE INDEX IDX_65D6AA5CA76ED395 ON user_post_like (user_id)');
+        $this->addSql('COMMENT ON COLUMN user_post_like.user_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE thumbnail (id INT NOT NULL, image_name VARCHAR(255) DEFAULT NULL, image_size INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN thumbnail.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN thumbnail.updated_at IS \'(DC2Type:datetime_immutable)\'');
@@ -62,6 +66,8 @@ final class Version20230929102611 extends AbstractMigration
         $this->addSql('ALTER TABLE categories_posts ADD CONSTRAINT FK_8C5EAFB712469DE2 FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE categories_posts ADD CONSTRAINT FK_8C5EAFB74B89032C FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE post ADD CONSTRAINT FK_5A8A6C8DFDFF2E92 FOREIGN KEY (thumbnail_id) REFERENCES thumbnail (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE user_post_like ADD CONSTRAINT FK_65D6AA5C4B89032C FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE user_post_like ADD CONSTRAINT FK_65D6AA5CA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
@@ -74,9 +80,12 @@ final class Version20230929102611 extends AbstractMigration
         $this->addSql('ALTER TABLE categories_posts DROP CONSTRAINT FK_8C5EAFB712469DE2');
         $this->addSql('ALTER TABLE categories_posts DROP CONSTRAINT FK_8C5EAFB74B89032C');
         $this->addSql('ALTER TABLE post DROP CONSTRAINT FK_5A8A6C8DFDFF2E92');
+        $this->addSql('ALTER TABLE user_post_like DROP CONSTRAINT FK_65D6AA5C4B89032C');
+        $this->addSql('ALTER TABLE user_post_like DROP CONSTRAINT FK_65D6AA5CA76ED395');
         $this->addSql('DROP TABLE category');
         $this->addSql('DROP TABLE categories_posts');
         $this->addSql('DROP TABLE post');
+        $this->addSql('DROP TABLE user_post_like');
         $this->addSql('DROP TABLE thumbnail');
         $this->addSql('DROP TABLE "user"');
         $this->addSql('DROP TABLE messenger_messages');

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -54,11 +55,16 @@ class Post
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
     private Collection $categories;
 
+    #[ORM\ManyToMany(targetEntity: User::class,)]
+    #[JoinTable(name:'user_post_like')]
+    private Collection $likes;
+
     public function __construct()
     {
         $this->updated_at = new \DateTimeImmutable();
         $this->created_at = new \DateTimeImmutable();
         $this->categories = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -192,6 +198,29 @@ class Post
 
         return $this;
     }
+public function getLikes():Collection {
+    return $this->likes;
+   }
+public function addLike(User $like): self
+    {
+    if(!$this->likes->contains($like)){
+         $this->likes[] = $like;
+    }
+    return $this;
+    }
 
-   
+public function removeLike(User $like): self
+{
+   $this->likes->removeElement($like);
+   return $this;
+}
+
+public function isLikedByUser(User $user): bool
+{
+  return $this->likes->contains($user);
+}
+public function howManyLikes(): int
+{
+    return count($this->likes);
+}
 }
